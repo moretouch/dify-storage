@@ -1,0 +1,132 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "数据保存",
+        "description": "允许你通过API保存字典、数组和值",
+        "version": "v1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://weather.example.com/v1"
+        }
+    ],
+    "paths": {
+        "/base/{key}": {
+            "get": {
+                "description": "获取某个key的值",
+                "operationId": "Get",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "要获取的key",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "deprecated": false
+            },
+            "put": {
+                "description": "新建一个key-value",
+                "operationId": "Put",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "要保存的key",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "value",
+                        "in": "query",
+                        "description": "要保存的value。如果值已经存在，则会报错",
+                        "required": true,
+                        "schema": {
+                            "type": "string|Array<string>|Object<string, string>"
+                        }
+                    },
+                    {
+                        "name": "expires",
+                        "in": "query",
+                        "description": "过期时间，多少秒后过期。不提供则不会过期。",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "deprecated": false
+            },
+            "post": {
+                "description": "保存一个key-value",
+                "operationId": "Post",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "要保存的key",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "value",
+                        "in": "query",
+                        "description": "要保存的value。如果值已经存在，则会覆盖",
+                        "required": true,
+                        "schema": {
+                            "type": "string|Array<string>|Object<string, string>"
+                        }
+                    },
+                    {
+                        "name": "expires",
+                        "in": "query",
+                        "description": "过期时间，多少秒后过期。不提供则不会过期。",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "deprecated": false
+            },
+            "delete": {
+                "description": "删除一个key-value",
+                "operationId": "Delete",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "要删除的key",
+                        "required": true,
+                        "schema": {
+                            "type": "string|Array<string>|Object<string, string>"
+                        }
+                    }
+                ],
+                "deprecated": false
+            }
+        }
+    },
+    "components": {
+        "schemas": {},
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "X-API-Key"
+            }
+        }
+    },
+    "security": [
+        {
+            "ApiKeyAuth": []
+        }
+    ]
+}
