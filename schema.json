@@ -7,14 +7,14 @@
     },
     "servers": [
         {
-            "url": "https://example.com/v1"
+            "url": "http://127.0.0.1:3000"
         }
     ],
     "paths": {
         "/base/{key}": {
             "get": {
                 "description": "获取某个key的值",
-                "operationId": "Get",
+                "operationId": "获取值",
                 "parameters": [
                     {
                         "name": "key",
@@ -26,11 +26,36 @@
                         }
                     }
                 ],
-                "deprecated": false
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "304": {
+                        "description": "值不存在"
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "put": {
                 "description": "新建一个key-value",
-                "operationId": "Put",
+                "operationId": "新建值",
                 "parameters": [
                     {
                         "name": "key",
@@ -60,11 +85,29 @@
                         }
                     }
                 ],
-                "deprecated": false
+                "deprecated": false,
+                "responses": {
+                    "201": {
+                        "description": "创建成功"
+                    },
+                    "409": {
+                        "description": "值已存在"
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "post": {
                 "description": "保存一个key-value",
-                "operationId": "Post",
+                "operationId": "保存值",
                 "parameters": [
                     {
                         "name": "key",
@@ -94,11 +137,26 @@
                         }
                     }
                 ],
-                "deprecated": false
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "保存成功"
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "delete": {
                 "description": "删除一个key-value",
-                "operationId": "Delete",
+                "operationId": "删除值",
                 "parameters": [
                     {
                         "name": "key",
@@ -110,7 +168,109 @@
                         }
                     }
                 ],
-                "deprecated": false
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "删除成功"
+                    },
+                    "404": {
+                        "description": "值不存在"
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tools/bing-translate": {
+            "get": {
+                "operationId": "必应翻译，短文本",
+                "summary": "Translate text using Bing Translate",
+                "parameters": [
+                    {
+                        "name": "text",
+                        "in": "query",
+                        "description": "Text to translate",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Source language",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Target language",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "asHtml",
+                        "in": "query",
+                        "description": "Whether to treat the text as HTML",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Translation successful",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Translation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tools/bing-translate/languages": {
+            "get": {
+                "operationId": "必应翻译，支持的语言",
+                "summary": "Get supported languages for Bing Translate",
+                "responses": {
+                    "200": {
+                        "description": "Get languages successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "Record<string, string>"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },
