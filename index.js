@@ -98,7 +98,7 @@ const __translate = async (req, res) => {
     let from = req.query.from;
     let to = req.query.to;
     let asHtml = req.query.asHtml;
-    const isEnglish = /^[a-zA-Z]+$/.test(text);
+    const isEnglish = /^[\x00-\xff]*$/.test(text);
     if (!from && !to) {
         from = isEnglish ? 'en' : null;
         to = isEnglish ? 'zh-Hans' : 'en';
