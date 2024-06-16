@@ -3,6 +3,7 @@ const express = require('express');
 const redis = require('redis');
 const {MET} = require("bing-translate-api");
 
+
 const REDIS_CONNECTION_STRING = process.env.REDIS_CONNECTION_STRING;
 const AUTH_API_KEY = process.env.AUTH_API_KEY;
 
@@ -11,6 +12,8 @@ const client = redis.createClient({
 });
 
 const app = express();
+app.use(require('body-parser').urlencoded({extended: false}))
+app.use(require('body-parser').json())
 
 client.connect().then(async (e) => {
     console.log('Connected to Redis');
@@ -92,12 +95,15 @@ app.delete('/base/:key', async (req, res) => {
 // 必应翻译
 const __translate = async (req, res) => {
     let text = req.query.text
-    if (!text && req.body) {
-        text = req.body;
-    }
     let from = req.query.from;
     let to = req.query.to;
     let asHtml = req.query.asHtml;
+    if (req.method === 'POST' && req.is('application/json')) {
+        text = text || req.body.text;
+        from = from || req.body.from;
+        to = to || req.body.to;
+        asHtml = asHtml || req.body.asHtml;
+    }
     const isEnglish = /^[\x00-\xff]*$/.test(text);
     if (!from && !to) {
         from = isEnglish ? 'en' : null;
